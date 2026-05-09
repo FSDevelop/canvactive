@@ -1,0 +1,20 @@
+<script>
+import { observable } from "@canvactive/core";
+import { text } from "@canvactive/elements";
+
+// local elements
+import IncrementBtn from "./IncrementBtn.can";
+
+const count = observable(0);
+
+IncrementBtn.onClick = () => {
+  count.value++;
+};
+</script>
+
+<render>
+({ draw }) => {
+  draw(text(`Counter: ${count}`));
+  draw(IncrementBtn);
+}
+</render>

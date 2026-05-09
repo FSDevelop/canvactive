@@ -79,7 +79,8 @@ export interface CanvasOptions {
   background?: string;
 }
 
-export interface CanvasComponent {
+export interface CanvasComponent extends CanvasElement {
+  onClick?: () => void;
   setup?: (canvas: CanvasProject) => void | Unsubscribe;
   render: (context: CanvasRenderContext) => void;
 }

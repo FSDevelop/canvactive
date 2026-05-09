@@ -1,0 +1,9 @@
+<script>
+import { button } from "@canvactive/elements";
+</script>
+
+<render>
+({ draw }) => {
+  draw(button({ label: "Increase counter" }));
+}
+</render>

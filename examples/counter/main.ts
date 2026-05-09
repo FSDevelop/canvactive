@@ -1,4 +1,4 @@
 import { createCanvas } from "@canvactive/core";
-import Counter from "./Counter.can";
+import Canvas from "./Canvas.can";
 
-createCanvas("#counter-canvas").mount(Counter);
+createCanvas("#counter-canvas").mount(Canvas);

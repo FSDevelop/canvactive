@@ -10,5 +10,11 @@ export function bind<T>(
     render({ context }) {
       renderer(context, state.get());
     },
+    draw(context) {
+      this.render(context);
+    },
+    measure() {
+      return { width: 0, height: 0 };
+    },
   });
 }

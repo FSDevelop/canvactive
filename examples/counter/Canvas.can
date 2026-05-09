@@ -1,0 +1,9 @@
+<script>
+import Counter from "./elements/Counter.can";
+</script>
+
+<render>
+({ draw }) => {
+  draw(Counter);
+}
+</render>

@@ -1,9 +1,16 @@
 export function compileCan(source: string): string {
-  const script = compileScript(readBlock(source, "script") ?? "");
-  const render = readBlock(source, "render");
+  const scriptBlock = readScriptBlock(source);
+  const script = compileScript(scriptBlock?.content ?? "");
+  const isScene = scriptBlock?.attributes.split(/\s+/).includes("scene") ?? false;
+  const render = readBlock(source, isScene ? "create" : "render");
+  const update = isScene ? readBlock(source, "update") : undefined;
 
   if (!render) {
-    throw new Error("Canvactive component is missing a <render> block.");
+    throw new Error(
+      isScene
+        ? "Canvactive scene is missing a <create> block."
+        : "Canvactive component is missing a <render> block.",
+    );
   }
 
   return [
@@ -11,7 +18,9 @@ export function compileCan(source: string): string {
     "const __can_component = {",
     "  onClick: undefined,",
     "  setup: typeof setup === 'undefined' ? undefined : setup,",
-    "  update: typeof update === 'undefined' ? undefined : update,",
+    isScene
+      ? `  update: ${update ? update.trim() : "undefined"},`
+      : "  update: typeof update === 'undefined' ? undefined : update,",
     `  render: ${render.trim()},`,
     "  draw(context) {",
     "    const componentContext = {",
@@ -33,6 +42,20 @@ export function compileCan(source: string): string {
   ]
     .filter(Boolean)
     .join("\n");
+}
+
+function readScriptBlock(source: string): { attributes: string; content: string } | undefined {
+  const blockPattern = /<script(?<attributes>[^>]*)>(?<content>[\s\S]*?)<\/script>/;
+  const match = source.match(blockPattern);
+
+  if (!match?.groups) {
+    return undefined;
+  }
+
+  return {
+    attributes: match.groups.attributes.trim(),
+    content: match.groups.content,
+  };
 }
 
 function compileScript(source: string): string {

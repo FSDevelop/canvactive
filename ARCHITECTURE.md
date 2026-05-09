@@ -75,6 +75,28 @@ It reads:
 
 and emits a JavaScript module with a default component object.
 
+Scene files can use:
+
+```html
+<script scene>
+// scene code
+</script>
+
+<update>
+({ delta }) => {
+  // frame update
+}
+</update>
+
+<create>
+({ draw }) => {
+  // draw tree
+}
+</create>
+```
+
+For scene files, the compiler maps `<create>` to the component render function and `<update>` to the optional frame-loop lifecycle.
+
 Compiled components are both:
 
 - mountable root components
@@ -123,6 +145,7 @@ Important exports:
 ```ts
 createCanvas
 observable
+engine
 bind
 ```
 
@@ -139,6 +162,8 @@ delta
 elapsed
 frame
 ```
+
+The same frame data is also stored in the exported `engine` singleton, so components can read runtime context without threading it through observable state.
 
 ## Canvas Lifecycle
 

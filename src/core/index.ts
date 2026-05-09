@@ -1,5 +1,6 @@
 export { bind } from "./bind.js";
 export { createCanvas } from "./canvas.js";
+export { engine } from "./engine.js";
 export { button, rect, text } from "./elements/index.js";
 export { observable } from "./observable.js";
 export type {

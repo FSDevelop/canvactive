@@ -1,13 +1,15 @@
-<script>
+<script scene>
 import PlayScene from "./scenes/PlayScene.can";
-
-export const update = (context) => {
-  PlayScene.update(context);
-};
 </script>
 
-<render>
+<update>
+(context) => {
+  PlayScene.update(context);
+}
+</update>
+
+<create>
 ({ draw }) => {
   draw(PlayScene);
 }
-</render>
+</create>

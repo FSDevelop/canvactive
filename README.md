@@ -75,6 +75,32 @@ import Counter from "./elements/Counter.can";
 
 Components are drawable, so one `.can` component can render another with `draw(Component)`.
 
+## Scenes
+
+Game-style components can use `<script scene>` with `<create>` and `<update>`:
+
+```html
+<script scene>
+import { rect } from "@canvactive/elements";
+
+const player = rect({ x: 40, y: 190, width: 52, height: 52 });
+</script>
+
+<update>
+({ delta }) => {
+  player.x += 180 * delta;
+}
+</update>
+
+<create>
+({ draw }) => {
+  draw(player);
+}
+</create>
+```
+
+For scene components, `<create>` defines the draw tree and `<update>` runs on the frame loop.
+
 ## State
 
 Use `observable()` for reactive state:
@@ -98,6 +124,18 @@ Observables expose `.value` for reads and writes. They also stringify, so they c
 ```
 
 When observable state is read during rendering, Canvactive tracks it automatically and rerenders when it changes.
+
+Game-loop metadata is available through the `engine` singleton:
+
+```js
+import { engine } from "@canvactive/core";
+
+engine.frame;
+engine.delta;
+engine.elapsed;
+```
+
+Use observables for game state that belongs to the world. Use `engine` for runtime frame context.
 
 ## Elements
 

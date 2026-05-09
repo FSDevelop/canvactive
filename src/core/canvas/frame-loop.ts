@@ -1,4 +1,5 @@
 import type { CanvasUpdateContext } from "../types.js";
+import { updateEngineContext } from "../engine.js";
 
 export interface FrameLoop {
   start(): void;
@@ -36,13 +37,16 @@ export function createFrameLoop(options: FrameLoopOptions): FrameLoop {
     previousTime = time;
     frame += 1;
 
-    options.update({
+    const context = {
       canvas: options.canvas,
       context: options.context,
       delta,
       elapsed,
       frame,
-    });
+    };
+
+    updateEngineContext(context);
+    options.update(context);
     options.render();
 
     frameId = requestAnimationFrame(tick);

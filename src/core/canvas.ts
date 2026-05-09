@@ -1,7 +1,18 @@
-import type { CanvasComponent, CanvasProject, Unsubscribe } from "./types.js";
+import type { CanvasComponent, CanvasOptions, CanvasProject, Unsubscribe } from "./types.js";
 import { collectDependencies } from "./tracking.js";
 
-export function createCanvas(selector: string | HTMLCanvasElement): CanvasProject {
+const defaultCanvasOptions = {
+  background: "#f6f7fb",
+} satisfies Required<CanvasOptions>;
+
+export function createCanvas(
+  selector: string | HTMLCanvasElement,
+  options: CanvasOptions = {},
+): CanvasProject {
+  const canvasOptions = {
+    ...defaultCanvasOptions,
+    ...options,
+  };
   const canvas =
     typeof selector === "string"
       ? document.querySelector<HTMLCanvasElement>(selector)
@@ -25,10 +36,21 @@ export function createCanvas(selector: string | HTMLCanvasElement): CanvasProjec
   const render = () => {
     frameId = 0;
     cleanupRenderSubscriptions();
+    context.clearRect(0, 0, canvas.width, canvas.height);
+    context.fillStyle = canvasOptions.background;
+    context.fillRect(0, 0, canvas.width, canvas.height);
 
     if (component) {
+      const renderContext = {
+        canvas,
+        context,
+        draw(element, overrides) {
+          element.draw(renderContext, overrides);
+        },
+      } satisfies Parameters<CanvasComponent["render"]>[0];
+
       const dependencies = collectDependencies(() => {
-        component?.render({ canvas, context });
+        component?.render(renderContext);
       });
 
       dependencies.forEach((dependency) => {

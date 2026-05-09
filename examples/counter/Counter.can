@@ -1,7 +1,8 @@
 <script>
-import { observable } from "../../src/main";
+import { observable, text } from "../../src/main";
 
 const count = observable(0);
+const counterLabel = text();
 
 export function setup() {
   const button = document.querySelector("#increment");
@@ -23,16 +24,8 @@ export function setup() {
 </script>
 
 <render>
-({ canvas, context }) => {
-  context.clearRect(0, 0, canvas.width, canvas.height);
-
-  context.fillStyle = "#f6f7fb";
-  context.fillRect(0, 0, canvas.width, canvas.height);
-
-  context.fillStyle = "#172033";
-  context.font = "600 40px system-ui, sans-serif";
-  context.textAlign = "center";
-  context.textBaseline = "middle";
-  context.fillText(`Counter: ${count.get()}`, canvas.width / 2, canvas.height / 2);
+({ canvas, draw }) => {
+  counterLabel.set(`Counter: ${count.get()}`);
+  draw(counterLabel, { x: canvas.width / 2, y: canvas.height / 2 });
 }
 </render>

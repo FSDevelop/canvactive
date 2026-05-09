@@ -11,6 +11,34 @@ export interface Observable<T> {
 export interface CanvasRenderContext {
   canvas: HTMLCanvasElement;
   context: CanvasRenderingContext2D;
+  draw(element: CanvasElement, overrides?: CanvasElementOverrides): void;
+}
+
+export interface CanvasElementOverrides {
+  x?: number;
+  y?: number;
+}
+
+export interface CanvasElement {
+  draw(context: CanvasRenderContext, overrides?: CanvasElementOverrides): void;
+}
+
+export interface TextOptions extends CanvasElementOverrides {
+  value?: string;
+  color?: string;
+  fontFamily?: string;
+  fontSize?: number;
+  fontWeight?: string | number;
+  align?: CanvasTextAlign;
+  baseline?: CanvasTextBaseline;
+}
+
+export interface TextElement extends CanvasElement {
+  set(value: string): TextElement;
+}
+
+export interface CanvasOptions {
+  background?: string;
 }
 
 export interface CanvasComponent {

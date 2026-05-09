@@ -1,0 +1,40 @@
+<script>
+import { text } from "@canvactive/elements";
+import { breaks, sessions, streak } from "../state";
+
+const sessionsLabel = text({
+  value: () => `Sessions: ${sessions}`,
+  fontSize: 30,
+  fontWeight: 700,
+});
+
+const breaksLabel = text({
+  value: () => `Breaks: ${breaks}`,
+  color: "#355f63",
+  fontSize: 30,
+  fontWeight: 700,
+});
+
+const streakLabel = text({
+  value: () => `Streak: ${streak} days`,
+  color: "#7b4d18",
+  fontSize: 30,
+  fontWeight: 700,
+});
+
+const note = text({
+  value: "Each label rerenders when its observable changes.",
+  color: "#526179",
+  fontSize: 16,
+  fontWeight: 500,
+});
+</script>
+
+<render>
+({ draw }) => {
+  draw(sessionsLabel, { x: 40, y: 156 });
+  draw(breaksLabel, { x: 40, y: 204 });
+  draw(streakLabel, { x: 40, y: 252 });
+  draw(note, { x: 42, y: 314 });
+}
+</render>

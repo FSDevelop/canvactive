@@ -1,0 +1,27 @@
+<script>
+import AddSessionButton from "./buttons/AddSessionButton.can";
+import AddBreakButton from "./buttons/AddBreakButton.can";
+import ResetButton from "./buttons/ResetButton.can";
+import { breaks, resetBoard, sessions, streak } from "../state";
+
+AddSessionButton.onClick = () => {
+  sessions.value++;
+  streak.value++;
+};
+
+AddBreakButton.onClick = () => {
+  breaks.value++;
+};
+
+ResetButton.onClick = () => {
+  resetBoard();
+};
+</script>
+
+<render>
+({ draw }) => {
+  draw(AddSessionButton);
+  draw(AddBreakButton);
+  draw(ResetButton);
+}
+</render>

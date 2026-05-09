@@ -1,0 +1,13 @@
+<script>
+import Header from "./components/Header.can";
+import Stats from "./components/Stats.can";
+import Actions from "./components/Actions.can";
+</script>
+
+<render>
+({ draw }) => {
+  draw(Header);
+  draw(Stats);
+  draw(Actions);
+}
+</render>

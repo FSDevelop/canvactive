@@ -1,0 +1,9 @@
+<script>
+import { button } from "@canvactive/elements";
+</script>
+
+<render>
+({ draw }) => {
+  draw(button({ label: "Add session", width: 180 }), { x: 500, y: 158 });
+}
+</render>

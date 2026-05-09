@@ -1,0 +1,13 @@
+<script>
+import { button } from "@canvactive/elements";
+</script>
+
+<render>
+({ draw }) => {
+  draw(button({
+    label: "Reset board",
+    width: 180,
+    background: "#7b4d18",
+  }), { x: 500, y: 270 });
+}
+</render>

@@ -1,0 +1,23 @@
+<script>
+import { text } from "@canvactive/elements";
+
+const title = text({
+  value: "Focus Board",
+  fontSize: 44,
+  fontWeight: 700,
+});
+
+const subtitle = text({
+  value: "Canvas-native state, components, text, buttons, and click handling",
+  color: "#526179",
+  fontSize: 18,
+  fontWeight: 500,
+});
+</script>
+
+<render>
+({ draw }) => {
+  draw(title, { x: 40, y: 36 });
+  draw(subtitle, { x: 42, y: 94 });
+}
+</render>

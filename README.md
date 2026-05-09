@@ -27,3 +27,10 @@ export default defineConfig({
 VS Code syntax highlighting for `.can` files lives in `packages/vscode-canvactive`.
 
 The extension highlights both `<script>` and `<render>` blocks as JavaScript.
+
+## Examples
+
+```bash
+npm run dev:counter
+npm run dev:focus
+```

@@ -3,9 +3,11 @@ export type Observer<T> = (value: T, previousValue: T) => void;
 export type CanvasRenderer<T> = (context: CanvasRenderingContext2D, state: T) => void;
 
 export interface Observable<T> {
+  value: T;
   get(): T;
   set(nextValue: T | ((currentValue: T) => T)): void;
   subscribe(observer: Observer<T>): Unsubscribe;
+  toString(): string;
 }
 
 export interface CanvasRenderContext {
@@ -35,8 +37,10 @@ export interface InteractiveCanvasElement extends CanvasElement {
   click(): void;
 }
 
+export type TextValue = string | Observable<unknown> | (() => string);
+
 export interface TextOptions extends CanvasElementOverrides {
-  value?: string;
+  value?: TextValue;
   color?: string;
   fontFamily?: string;
   fontSize?: number;
@@ -46,7 +50,7 @@ export interface TextOptions extends CanvasElementOverrides {
 }
 
 export interface TextElement extends CanvasElement {
-  set(value: string): TextElement;
+  set(value: TextValue): TextElement;
 }
 
 export interface ButtonOptions extends CanvasElementOverrides {

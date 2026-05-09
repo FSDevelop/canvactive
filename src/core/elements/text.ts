@@ -1,4 +1,4 @@
-import type { CanvasRenderContext, TextElement, TextOptions } from "../types.js";
+import type { CanvasRenderContext, TextElement, TextOptions, TextValue } from "../types.js";
 
 const defaultTextOptions = {
   value: "",
@@ -12,7 +12,8 @@ const defaultTextOptions = {
   baseline: "middle",
 } satisfies Required<Omit<TextOptions, "width" | "height">>;
 
-export function text(options: TextOptions = {}): TextElement {
+export function text(valueOrOptions: TextValue | TextOptions = {}): TextElement {
+  const options = normalizeTextOptions(valueOrOptions);
   let currentValue = options.value ?? defaultTextOptions.value;
 
   const elementOptions = {
@@ -34,7 +35,30 @@ export function text(options: TextOptions = {}): TextElement {
       context.font = `${elementOptions.fontWeight} ${elementOptions.fontSize}px ${elementOptions.fontFamily}`;
       context.textAlign = elementOptions.align;
       context.textBaseline = elementOptions.baseline;
-      context.fillText(currentValue, x, y);
+      context.fillText(resolveTextValue(currentValue), x, y);
     },
   };
+}
+
+function normalizeTextOptions(valueOrOptions: TextValue | TextOptions): TextOptions {
+  if (isTextOptions(valueOrOptions)) {
+    return valueOrOptions;
+  }
+
+  return {
+    value: valueOrOptions,
+  };
+}
+
+function isTextOptions(valueOrOptions: TextValue | TextOptions): valueOrOptions is TextOptions {
+  return (
+    typeof valueOrOptions === "object" &&
+    valueOrOptions !== null &&
+    !("get" in valueOrOptions) &&
+    !("subscribe" in valueOrOptions)
+  );
+}
+
+function resolveTextValue(value: TextValue): string {
+  return typeof value === "function" ? value() : String(value);
 }

@@ -6,6 +6,14 @@ export function observable<T>(initialValue: T): Observable<T> {
   const observers = new Set<Observer<T>>();
 
   const state: Observable<T> = {
+    get value() {
+      return this.get();
+    },
+
+    set value(nextValue) {
+      this.set(nextValue);
+    },
+
     get() {
       trackDependency(state as Observable<unknown>);
       return value;
@@ -31,6 +39,10 @@ export function observable<T>(initialValue: T): Observable<T> {
       return () => {
         observers.delete(observer);
       };
+    },
+
+    toString() {
+      return String(this.get());
     },
   };
 

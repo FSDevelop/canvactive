@@ -1,5 +1,5 @@
 export function compileCan(source: string): string {
-  const script = readBlock(source, "script") ?? "";
+  const script = compileScript(readBlock(source, "script") ?? "");
   const render = readBlock(source, "render");
 
   if (!render) {
@@ -16,6 +16,10 @@ export function compileCan(source: string): string {
   ]
     .filter(Boolean)
     .join("\n");
+}
+
+function compileScript(source: string): string {
+  return source.replace(/\btext\s*\(\s*(`(?:\\.|[^`\\])*`)\s*\)/g, "text(() => $1)");
 }
 
 function readBlock(source: string, tagName: string): string | undefined {

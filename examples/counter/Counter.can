@@ -3,18 +3,17 @@ import { observable } from "@canvactive/core";
 import { button, text } from "@canvactive/elements";
 
 const count = observable(0);
-const counter = text();
+const counter = text(`Counter: ${count}`);
 const incrementButton = button({
   label: "Increase counter",
   onClick() {
-    count.set((value) => value + 1);
+    count.value++;
   },
 });
 </script>
 
 <render>
 ({ canvas, draw }) => {
-  counter.set(`Counter: ${count.get()}`);
   draw(counter, { x: canvas.width / 2, y: canvas.height / 2 });
   draw(incrementButton, { x: canvas.width / 2 - 90, y: canvas.height / 2 + 52 });
 }

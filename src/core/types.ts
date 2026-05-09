@@ -25,6 +25,12 @@ export interface CanvasElementOverrides {
 
 export interface CanvasElement {
   draw(context: CanvasRenderContext, overrides?: CanvasElementOverrides): void;
+  measure(context: CanvasRenderContext): CanvasElementSize;
+}
+
+export interface CanvasElementSize {
+  width: number;
+  height: number;
 }
 
 export interface CanvasPoint {

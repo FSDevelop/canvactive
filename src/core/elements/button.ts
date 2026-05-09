@@ -46,6 +46,13 @@ export function button(options: ButtonOptions = {}): ButtonElement {
       return this;
     },
 
+    measure() {
+      return {
+        width: elementOptions.width,
+        height: elementOptions.height,
+      };
+    },
+
     hitTest(point: CanvasPoint) {
       return (
         point.x >= bounds.x &&

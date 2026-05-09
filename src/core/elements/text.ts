@@ -8,8 +8,8 @@ const defaultTextOptions = {
   fontFamily: "system-ui, sans-serif",
   fontSize: 40,
   fontWeight: 600,
-  align: "center",
-  baseline: "middle",
+  align: "left",
+  baseline: "top",
 } satisfies Required<Omit<TextOptions, "width" | "height">>;
 
 export function text(valueOrOptions: TextValue | TextOptions = {}): TextElement {
@@ -27,14 +27,20 @@ export function text(valueOrOptions: TextValue | TextOptions = {}): TextElement 
       return this;
     },
 
+    measure({ context }) {
+      applyTextStyles(context, elementOptions);
+
+      return {
+        width: context.measureText(resolveTextValue(currentValue)).width,
+        height: elementOptions.fontSize,
+      };
+    },
+
     draw({ context }: CanvasRenderContext, overrides = {}) {
       const x = overrides.x ?? elementOptions.x;
       const y = overrides.y ?? elementOptions.y;
 
-      context.fillStyle = elementOptions.color;
-      context.font = `${elementOptions.fontWeight} ${elementOptions.fontSize}px ${elementOptions.fontFamily}`;
-      context.textAlign = elementOptions.align;
-      context.textBaseline = elementOptions.baseline;
+      applyTextStyles(context, elementOptions);
       context.fillText(resolveTextValue(currentValue), x, y);
     },
   };
@@ -61,4 +67,17 @@ function isTextOptions(valueOrOptions: TextValue | TextOptions): valueOrOptions 
 
 function resolveTextValue(value: TextValue): string {
   return typeof value === "function" ? value() : String(value);
+}
+
+function applyTextStyles(
+  context: CanvasRenderingContext2D,
+  options: Required<Pick<
+    TextOptions,
+    "color" | "fontFamily" | "fontSize" | "fontWeight" | "align" | "baseline"
+  >>,
+) {
+  context.fillStyle = options.color;
+  context.font = `${options.fontWeight} ${options.fontSize}px ${options.fontFamily}`;
+  context.textAlign = options.align;
+  context.textBaseline = options.baseline;
 }

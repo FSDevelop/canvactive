@@ -51,11 +51,24 @@ export function createCanvas(
     context.fillRect(0, 0, canvas.width, canvas.height);
 
     if (component) {
+      const flow = {
+        x: 0,
+        y: 0,
+      };
       const renderContext = {
         canvas,
         context,
         draw(element, overrides) {
-          element.draw(renderContext, overrides);
+          const resolvedOverrides = overrides ?? {
+            x: flow.x,
+            y: flow.y,
+          };
+
+          element.draw(renderContext, resolvedOverrides);
+
+          if (!overrides) {
+            flow.y += element.measure(renderContext).height;
+          }
 
           if (isInteractiveElement(element)) {
             interactiveElements.push(element);

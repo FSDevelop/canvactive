@@ -7,6 +7,7 @@ export type {
   ButtonOptions,
   CanvasElement,
   CanvasElementOverrides,
+  CanvasElementSize,
   CanvasOptions,
   CanvasComponent,
   CanvasProject,

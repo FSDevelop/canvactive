@@ -1,31 +1,21 @@
 <script>
-import { observable, text } from "../../src/main";
+import { observable } from "@canvactive/core";
+import { button, text } from "@canvactive/elements";
 
 const count = observable(0);
-const counterLabel = text();
-
-export function setup() {
-  const button = document.querySelector("#increment");
-
-  if (!button) {
-    throw new Error("Counter button was not found.");
-  }
-
-  const increment = () => {
+const counter = text();
+const incrementButton = button({
+  label: "Increase counter",
+  onClick() {
     count.set((value) => value + 1);
-  };
-
-  button.addEventListener("click", increment);
-
-  return () => {
-    button.removeEventListener("click", increment);
-  };
-}
+  },
+});
 </script>
 
 <render>
 ({ canvas, draw }) => {
-  counterLabel.set(`Counter: ${count.get()}`);
-  draw(counterLabel, { x: canvas.width / 2, y: canvas.height / 2 });
+  counter.set(`Counter: ${count.get()}`);
+  draw(counter, { x: canvas.width / 2, y: canvas.height / 2 });
+  draw(incrementButton, { x: canvas.width / 2 - 90, y: canvas.height / 2 + 52 });
 }
 </render>

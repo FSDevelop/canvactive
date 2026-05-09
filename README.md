@@ -5,7 +5,7 @@ Small reactive state bindings for canvas rendering.
 ## Example
 
 ```ts
-import { createCanvas } from "canvactive";
+import { createCanvas } from "@canvactive/core";
 import Counter from "./Counter.can";
 
 createCanvas("#counter-canvas").mount(Counter);

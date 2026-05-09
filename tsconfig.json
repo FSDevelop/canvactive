@@ -5,6 +5,15 @@
     "moduleResolution": "Bundler",
     "declaration": true,
     "strict": true,
+    "baseUrl": ".",
+    "paths": {
+      "@canvactive/core": [
+        "./src/core/index.ts"
+      ],
+      "@canvactive/elements": [
+        "./src/core/elements/index.ts"
+      ]
+    },
     "esModuleInterop": true,
     "forceConsistentCasingInFileNames": true,
     "skipLibCheck": true

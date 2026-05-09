@@ -10,7 +10,7 @@ const defaultTextOptions = {
   fontWeight: 600,
   align: "center",
   baseline: "middle",
-} satisfies Required<TextOptions>;
+} satisfies Required<Omit<TextOptions, "width" | "height">>;
 
 export function text(options: TextOptions = {}): TextElement {
   let currentValue = options.value ?? defaultTextOptions.value;

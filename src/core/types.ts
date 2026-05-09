@@ -17,10 +17,22 @@ export interface CanvasRenderContext {
 export interface CanvasElementOverrides {
   x?: number;
   y?: number;
+  width?: number;
+  height?: number;
 }
 
 export interface CanvasElement {
   draw(context: CanvasRenderContext, overrides?: CanvasElementOverrides): void;
+}
+
+export interface CanvasPoint {
+  x: number;
+  y: number;
+}
+
+export interface InteractiveCanvasElement extends CanvasElement {
+  hitTest(point: CanvasPoint): boolean;
+  click(): void;
 }
 
 export interface TextOptions extends CanvasElementOverrides {
@@ -35,6 +47,22 @@ export interface TextOptions extends CanvasElementOverrides {
 
 export interface TextElement extends CanvasElement {
   set(value: string): TextElement;
+}
+
+export interface ButtonOptions extends CanvasElementOverrides {
+  label?: string;
+  onClick?: () => void;
+  background?: string;
+  color?: string;
+  fontFamily?: string;
+  fontSize?: number;
+  fontWeight?: string | number;
+  radius?: number;
+}
+
+export interface ButtonElement extends InteractiveCanvasElement {
+  setLabel(label: string): ButtonElement;
+  onClick(handler: () => void): ButtonElement;
 }
 
 export interface CanvasOptions {

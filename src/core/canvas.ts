@@ -1,4 +1,12 @@
-import type { CanvasComponent, CanvasOptions, CanvasProject, Unsubscribe } from "./types.js";
+import type {
+  CanvasComponent,
+  CanvasElement,
+  CanvasOptions,
+  CanvasPoint,
+  CanvasProject,
+  InteractiveCanvasElement,
+  Unsubscribe,
+} from "./types.js";
 import { collectDependencies } from "./tracking.js";
 
 const defaultCanvasOptions = {
@@ -32,10 +40,12 @@ export function createCanvas(
   let frameId = 0;
   let setupCleanups: Unsubscribe[] = [];
   let renderCleanups: Unsubscribe[] = [];
+  let interactiveElements: InteractiveCanvasElement[] = [];
 
   const render = () => {
     frameId = 0;
     cleanupRenderSubscriptions();
+    interactiveElements = [];
     context.clearRect(0, 0, canvas.width, canvas.height);
     context.fillStyle = canvasOptions.background;
     context.fillRect(0, 0, canvas.width, canvas.height);
@@ -46,6 +56,10 @@ export function createCanvas(
         context,
         draw(element, overrides) {
           element.draw(renderContext, overrides);
+
+          if (isInteractiveElement(element)) {
+            interactiveElements.push(element);
+          }
         },
       } satisfies Parameters<CanvasComponent["render"]>[0];
 
@@ -57,6 +71,39 @@ export function createCanvas(
         renderCleanups.push(dependency.subscribe(scheduleRender));
       });
     }
+  };
+
+  const getCanvasPoint = (event: MouseEvent): CanvasPoint => {
+    const bounds = canvas.getBoundingClientRect();
+
+    return {
+      x: ((event.clientX - bounds.left) / bounds.width) * canvas.width,
+      y: ((event.clientY - bounds.top) / bounds.height) * canvas.height,
+    };
+  };
+
+  const findInteractiveElement = (point: CanvasPoint) => {
+    for (let index = interactiveElements.length - 1; index >= 0; index -= 1) {
+      const element = interactiveElements[index];
+
+      if (element.hitTest(point)) {
+        return element;
+      }
+    }
+
+    return undefined;
+  };
+
+  const handlePointerMove = (event: PointerEvent) => {
+    canvas.style.cursor = findInteractiveElement(getCanvasPoint(event)) ? "pointer" : "";
+  };
+
+  const handlePointerLeave = () => {
+    canvas.style.cursor = "";
+  };
+
+  const handleClick = (event: PointerEvent) => {
+    findInteractiveElement(getCanvasPoint(event))?.click();
   };
 
   const scheduleRender = () => {
@@ -77,6 +124,10 @@ export function createCanvas(
     renderCleanups = [];
   };
 
+  canvas.addEventListener("pointermove", handlePointerMove);
+  canvas.addEventListener("pointerleave", handlePointerLeave);
+  canvas.addEventListener("click", handleClick);
+
   return {
     render: scheduleRender,
     mount(nextComponent) {
@@ -96,10 +147,20 @@ export function createCanvas(
     destroy() {
       cleanupSetup();
       cleanupRenderSubscriptions();
+      canvas.removeEventListener("pointermove", handlePointerMove);
+      canvas.removeEventListener("pointerleave", handlePointerLeave);
+      canvas.removeEventListener("click", handleClick);
+      canvas.style.cursor = "";
 
       if (frameId !== 0) {
         cancelAnimationFrame(frameId);
       }
     },
   };
+}
+
+function isInteractiveElement(element: CanvasElement): element is InteractiveCanvasElement {
+  const possibleElement = element as Partial<InteractiveCanvasElement>;
+
+  return typeof possibleElement.hitTest === "function" && typeof possibleElement.click === "function";
 }

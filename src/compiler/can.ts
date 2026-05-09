@@ -11,6 +11,7 @@ export function compileCan(source: string): string {
     "const __can_component = {",
     "  onClick: undefined,",
     "  setup: typeof setup === 'undefined' ? undefined : setup,",
+    "  update: typeof update === 'undefined' ? undefined : update,",
     `  render: ${render.trim()},`,
     "  draw(context) {",
     "    const componentContext = {",

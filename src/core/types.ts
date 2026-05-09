@@ -24,6 +24,7 @@ export interface CanvasElementOverrides {
 }
 
 export interface CanvasElement {
+  layout?: "flow" | "absolute";
   draw(context: CanvasRenderContext, overrides?: CanvasElementOverrides): void;
   measure(context: CanvasRenderContext): CanvasElementSize;
 }
@@ -75,13 +76,34 @@ export interface ButtonElement extends InteractiveCanvasElement {
   onClick(handler: () => void): ButtonElement;
 }
 
+export interface RectOptions extends CanvasElementOverrides {
+  color?: string;
+}
+
+export interface RectElement extends CanvasElement {
+  x: number;
+  y: number;
+  width: number;
+  height: number;
+  color: string;
+}
+
 export interface CanvasOptions {
   background?: string;
+}
+
+export interface CanvasUpdateContext {
+  canvas: HTMLCanvasElement;
+  context: CanvasRenderingContext2D;
+  delta: number;
+  elapsed: number;
+  frame: number;
 }
 
 export interface CanvasComponent extends CanvasElement {
   onClick?: () => void;
   setup?: (canvas: CanvasProject) => void | Unsubscribe;
+  update?: (context: CanvasUpdateContext) => void;
   render: (context: CanvasRenderContext) => void;
 }
 

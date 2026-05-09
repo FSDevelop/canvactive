@@ -1,0 +1,18 @@
+<script>
+import { delta, frame } from "../game/state";
+import { player, updatePlayer } from "../entities/Player";
+import Hud from "../ui/Hud.can";
+
+export function update(context) {
+  frame.value = context.frame;
+  delta.value = context.delta;
+  updatePlayer(context.delta, context.canvas);
+}
+</script>
+
+<render>
+({ draw }) => {
+  draw(Hud);
+  draw(player);
+}
+</render>

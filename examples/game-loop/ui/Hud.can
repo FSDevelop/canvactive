@@ -1,0 +1,25 @@
+<script>
+import { text } from "@canvactive/elements";
+import { delta, frame, playerX } from "../game/state";
+
+const title = text({
+  value: "Optional update() lifecycle",
+  color: "#f8fafc",
+  fontSize: 34,
+  fontWeight: 700,
+});
+
+const stats = text({
+  value: () => `frame ${frame} | delta ${delta.value.toFixed(3)}s | x ${Math.round(playerX.value)}`,
+  color: "#9fb2cc",
+  fontSize: 17,
+  fontWeight: 500,
+});
+</script>
+
+<render>
+({ draw }) => {
+  draw(title, { x: 40, y: 38 });
+  draw(stats, { x: 42, y: 88 });
+}
+</render>

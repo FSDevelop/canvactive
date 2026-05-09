@@ -3,6 +3,7 @@ import type {
   CanvasOptions,
   CanvasProject,
 } from "./types.js";
+import { createFrameLoop } from "./canvas/frame-loop.js";
 import { createCanvasInteractions } from "./canvas/interactions.js";
 import { CleanupScope } from "./canvas/lifecycle.js";
 import { createRenderContext } from "./canvas/render-context.js";
@@ -28,6 +29,16 @@ export function createCanvas(
 
   let component: CanvasComponent | undefined;
   let frameId = 0;
+  let frameLoop = createFrameLoop({
+    canvas,
+    context,
+    update(updateContext) {
+      component?.update?.(updateContext);
+    },
+    render() {
+      render();
+    },
+  });
 
   const render = () => {
     frameId = 0;
@@ -51,6 +62,10 @@ export function createCanvas(
   };
 
   const scheduleRender = () => {
+    if (frameLoop.running) {
+      return;
+    }
+
     if (frameId !== 0) {
       return;
     }
@@ -61,16 +76,23 @@ export function createCanvas(
   return {
     render: scheduleRender,
     mount(nextComponent) {
+      frameLoop.stop();
       setupCleanups.flush();
       renderCleanups.flush();
       component = nextComponent;
 
       setupCleanups.add(nextComponent.setup?.(this));
 
-      render();
+      if (nextComponent.update) {
+        frameLoop.start();
+      } else {
+        render();
+      }
+
       return this;
     },
     destroy() {
+      frameLoop.stop();
       setupCleanups.flush();
       renderCleanups.flush();
       interactions.destroy();

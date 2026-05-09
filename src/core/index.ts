@@ -1,10 +1,11 @@
 export { bind } from "./bind.js";
 export { createCanvas } from "./canvas.js";
-export { button, text } from "./elements/index.js";
+export { button, rect, text } from "./elements/index.js";
 export { observable } from "./observable.js";
 export type {
   ButtonElement,
   ButtonOptions,
+  CanvasUpdateContext,
   CanvasElement,
   CanvasElementOverrides,
   CanvasElementSize,
@@ -15,6 +16,8 @@ export type {
   CanvasRenderer,
   Observable,
   Observer,
+  RectElement,
+  RectOptions,
   TextElement,
   TextOptions,
   Unsubscribe,

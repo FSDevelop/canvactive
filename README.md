@@ -168,6 +168,12 @@ Run the larger focus board example:
 npm run dev:focus
 ```
 
+Run the game-loop example:
+
+```bash
+npm run dev:game
+```
+
 ## Editor Support
 
 VS Code syntax highlighting for `.can` files lives in `packages/vscode-canvactive`.

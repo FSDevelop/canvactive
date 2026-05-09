@@ -20,11 +20,11 @@ export function createRenderContext(
     canvas,
     context,
     draw(element, overrides) {
-      const resolvedOverrides = resolveDrawOverrides(flow, overrides);
+      const resolvedOverrides = resolveDrawOverrides(element, flow, overrides);
 
       element.draw(renderContext, resolvedOverrides);
 
-      if (!overrides) {
+      if (!overrides && element.layout !== "absolute") {
         flow.y += element.measure(renderContext).height;
       }
 
@@ -38,10 +38,15 @@ export function createRenderContext(
 }
 
 function resolveDrawOverrides(
+  element: CanvasElement,
   flow: Pick<CanvasElementOverrides, "x" | "y">,
   overrides: CanvasElementOverrides | undefined,
-): CanvasElementOverrides {
-  return overrides ?? {
+): CanvasElementOverrides | undefined {
+  if (overrides || element.layout === "absolute") {
+    return overrides;
+  }
+
+  return {
     x: flow.x,
     y: flow.y,
   };

@@ -1,6 +1,6 @@
 {
   "name": "canvactive",
-  "version": "0.5.1",
+  "version": "0.6.0",
   "description": "Small reactive state bindings for canvas rendering.",
   "type": "module",
   "main": "./dist/main.js",
@@ -32,6 +32,7 @@
     "dev": "vite --config examples/counter/vite.config.ts examples/counter",
     "dev:counter": "vite --config examples/counter/vite.config.ts examples/counter",
     "dev:focus": "vite --config examples/focus-board/vite.config.ts examples/focus-board",
+    "dev:game": "vite --config examples/game-loop/vite.config.ts examples/game-loop",
     "typecheck": "tsc --noEmit"
   },
   "keywords": [

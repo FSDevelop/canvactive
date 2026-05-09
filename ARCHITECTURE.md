@@ -128,6 +128,18 @@ bind
 
 `bind` is a compatibility helper. New examples should prefer `createCanvas(...).mount(...)`.
 
+Components may optionally export `update(context)`. When present, Canvactive starts a `requestAnimationFrame` loop and calls `update` before each render.
+
+The update context includes:
+
+```ts
+canvas
+context
+delta
+elapsed
+frame
+```
+
 ## Canvas Lifecycle
 
 `src/core/canvas.ts` owns `createCanvas`.
@@ -218,6 +230,7 @@ Current elements:
 
 - `text`
 - `button`
+- `rect`
 
 Elements are exported from:
 
@@ -294,6 +307,21 @@ Current examples:
 ```text
 examples/counter
 examples/focus-board
+examples/game-loop
+```
+
+`examples/game-loop` uses a more game-oriented structure:
+
+```text
+game/
+  config.ts
+  state.ts
+entities/
+  Player.ts
+scenes/
+  PlayScene.can
+ui/
+  Hud.can
 ```
 
 Run them with:
@@ -301,6 +329,7 @@ Run them with:
 ```bash
 npm run dev:counter
 npm run dev:focus
+npm run dev:game
 ```
 
 Build checks:

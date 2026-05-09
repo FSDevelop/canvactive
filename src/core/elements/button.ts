@@ -36,6 +36,8 @@ export function button(options: ButtonOptions = {}): ButtonElement {
   };
 
   return {
+    layout: "flow",
+
     setLabel(nextLabel) {
       label = nextLabel;
       return this;

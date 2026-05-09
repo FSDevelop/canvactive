@@ -22,6 +22,8 @@ export function text(valueOrOptions: TextValue | TextOptions = {}): TextElement 
   };
 
   return {
+    layout: "flow",
+
     set(nextValue) {
       currentValue = nextValue;
       return this;

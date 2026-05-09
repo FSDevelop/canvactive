@@ -1,0 +1,13 @@
+<script>
+import PlayScene from "./scenes/PlayScene.can";
+
+export const update = (context) => {
+  PlayScene.update(context);
+};
+</script>
+
+<render>
+({ draw }) => {
+  draw(PlayScene);
+}
+</render>

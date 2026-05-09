@@ -1,0 +1,40 @@
+<script>
+import { observable } from "../../src/main";
+
+const count = observable(0);
+
+export const watch = [count];
+
+export function setup() {
+  const button = document.querySelector("#increment");
+
+  if (!button) {
+    throw new Error("Counter button was not found.");
+  }
+
+  const increment = () => {
+    count.set((value) => value + 1);
+  };
+
+  button.addEventListener("click", increment);
+
+  return () => {
+    button.removeEventListener("click", increment);
+  };
+}
+</script>
+
+<render>
+({ canvas, context }) => {
+  context.clearRect(0, 0, canvas.width, canvas.height);
+
+  context.fillStyle = "#f6f7fb";
+  context.fillRect(0, 0, canvas.width, canvas.height);
+
+  context.fillStyle = "#172033";
+  context.font = "600 40px system-ui, sans-serif";
+  context.textAlign = "center";
+  context.textBaseline = "middle";
+  context.fillText(`Counter: ${count.get()}`, canvas.width / 2, canvas.height / 2);
+}
+</render>

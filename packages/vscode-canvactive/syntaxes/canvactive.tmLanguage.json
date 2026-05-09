@@ -1,0 +1,116 @@
+{
+  "$schema": "https://raw.githubusercontent.com/martinring/tmlanguage/master/tmlanguage.json",
+  "name": "Canvactive",
+  "scopeName": "source.canvactive",
+  "patterns": [
+    {
+      "include": "#comments"
+    },
+    {
+      "include": "#script-block"
+    },
+    {
+      "include": "#render-block"
+    },
+    {
+      "include": "#tags"
+    }
+  ],
+  "repository": {
+    "comments": {
+      "patterns": [
+        {
+          "name": "comment.block.html.canvactive",
+          "begin": "<!--",
+          "end": "-->"
+        }
+      ]
+    },
+    "script-block": {
+      "name": "meta.embedded.block.javascript.canvactive",
+      "begin": "(<)(script)(>)",
+      "beginCaptures": {
+        "1": {
+          "name": "punctuation.definition.tag.begin.canvactive"
+        },
+        "2": {
+          "name": "entity.name.tag.script.canvactive"
+        },
+        "3": {
+          "name": "punctuation.definition.tag.end.canvactive"
+        }
+      },
+      "end": "(</)(script)(>)",
+      "endCaptures": {
+        "1": {
+          "name": "punctuation.definition.tag.begin.canvactive"
+        },
+        "2": {
+          "name": "entity.name.tag.script.canvactive"
+        },
+        "3": {
+          "name": "punctuation.definition.tag.end.canvactive"
+        }
+      },
+      "patterns": [
+        {
+          "include": "source.js"
+        }
+      ]
+    },
+    "render-block": {
+      "name": "meta.embedded.block.javascript.canvactive",
+      "begin": "(<)(render)(>)",
+      "beginCaptures": {
+        "1": {
+          "name": "punctuation.definition.tag.begin.canvactive"
+        },
+        "2": {
+          "name": "entity.name.tag.render.canvactive"
+        },
+        "3": {
+          "name": "punctuation.definition.tag.end.canvactive"
+        }
+      },
+      "end": "(</)(render)(>)",
+      "endCaptures": {
+        "1": {
+          "name": "punctuation.definition.tag.begin.canvactive"
+        },
+        "2": {
+          "name": "entity.name.tag.render.canvactive"
+        },
+        "3": {
+          "name": "punctuation.definition.tag.end.canvactive"
+        }
+      },
+      "patterns": [
+        {
+          "include": "source.js"
+        }
+      ]
+    },
+    "tags": {
+      "patterns": [
+        {
+          "name": "meta.tag.canvactive",
+          "begin": "(</?)([A-Za-z][A-Za-z0-9-]*)",
+          "beginCaptures": {
+            "1": {
+              "name": "punctuation.definition.tag.begin.canvactive"
+            },
+            "2": {
+              "name": "entity.name.tag.canvactive"
+            }
+          },
+          "end": "(/?>)",
+          "endCaptures": {
+            "1": {
+              "name": "punctuation.definition.tag.end.canvactive"
+            }
+          }
+        }
+      ]
+    }
+  }
+}

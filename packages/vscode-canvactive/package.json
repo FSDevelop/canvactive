@@ -1,0 +1,36 @@
+{
+  "name": "vscode-canvactive",
+  "displayName": "Canvactive",
+  "description": "Syntax highlighting for Canvactive .can components.",
+  "version": "0.1.0",
+  "publisher": "canvactive",
+  "license": "MIT",
+  "engines": {
+    "vscode": "^1.90.0"
+  },
+  "categories": [
+    "Programming Languages"
+  ],
+  "contributes": {
+    "languages": [
+      {
+        "id": "canvactive",
+        "aliases": [
+          "Canvactive",
+          "canvactive"
+        ],
+        "extensions": [
+          ".can"
+        ],
+        "configuration": "./language-configuration.json"
+      }
+    ],
+    "grammars": [
+      {
+        "language": "canvactive",
+        "scopeName": "source.canvactive",
+        "path": "./syntaxes/canvactive.tmLanguage.json"
+      }
+    ]
+  }
+}

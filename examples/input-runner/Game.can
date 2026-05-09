@@ -1,0 +1,9 @@
+<script scene>
+import PlayScene from "./scenes/PlayScene.can";
+</script>
+
+<create>
+({ draw }) => {
+  draw(PlayScene);
+}
+</create>

@@ -1,10 +1,14 @@
 import type {
   CanvasComponent,
+  CanvasDrawable,
   CanvasElement,
+  CanvasElementConstructor,
   CanvasElementOverrides,
   CanvasRenderContext,
   InteractiveCanvasElement,
 } from "../types.js";
+
+const componentInstances = new WeakMap<CanvasElementConstructor, CanvasElement>();
 
 export function createRenderContext(
   canvas: HTMLCanvasElement,
@@ -20,7 +24,8 @@ export function createRenderContext(
   const renderContext = {
     canvas,
     context,
-    draw(element, overrides) {
+    draw(drawable, overrides) {
+      const element = resolveElement(drawable);
       const resolvedOverrides = resolveDrawOverrides(element, flow, overrides);
 
       element.draw(renderContext, resolvedOverrides);
@@ -40,6 +45,22 @@ export function createRenderContext(
   } satisfies Parameters<CanvasComponent["render"]>[0];
 
   return renderContext;
+}
+
+function resolveElement(drawable: CanvasDrawable): CanvasElement {
+  if (typeof drawable !== "function") {
+    return drawable;
+  }
+
+  const cachedElement = componentInstances.get(drawable);
+
+  if (cachedElement) {
+    return cachedElement;
+  }
+
+  const element = new drawable();
+  componentInstances.set(drawable, element);
+  return element;
 }
 
 function resolveDrawOverrides(

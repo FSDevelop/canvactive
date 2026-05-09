@@ -1,0 +1,33 @@
+<script scene>
+import { engine } from "@canvactive/core";
+import { clearEntities, entities } from "../game/state";
+import { spawnBatch } from "../game/spawn";
+import AddEntitiesButton from "../ui/AddEntitiesButton.can";
+import ClearButton from "../ui/ClearButton.can";
+import Hud from "../ui/Hud.can";
+
+AddEntitiesButton.onClick = () => {
+  spawnBatch(engine);
+};
+
+ClearButton.onClick = () => {
+  clearEntities();
+};
+</script>
+
+<update>
+(context) => {
+  if (context.input.pressed(" ")) {
+    spawnBatch(context);
+  }
+}
+</update>
+
+<create>
+({ draw }) => {
+  draw(Hud);
+  draw(AddEntitiesButton);
+  draw(ClearButton);
+  entities.value.forEach((entity) => draw(entity));
+}
+</create>

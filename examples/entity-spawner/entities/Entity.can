@@ -1,0 +1,49 @@
+<script scene>
+import { rect } from "@canvactive/elements";
+
+export function create(options) {
+  const body = rect({
+    x: options.x,
+    y: options.y,
+    width: options.size,
+    height: options.size,
+    color: options.color,
+  });
+  let velocityX = options.velocityX;
+  let velocityY = options.velocityY;
+
+  return {
+    update({ canvas, delta }) {
+      body.x += velocityX * delta;
+      body.y += velocityY * delta;
+
+      if (body.x <= 24 || body.x + body.width >= canvas.width - 24) {
+        velocityX *= -1;
+      }
+
+      if (body.y <= 140 || body.y + body.height >= canvas.height - 24) {
+        velocityY *= -1;
+      }
+
+      body.x = clamp(body.x, 24, canvas.width - body.width - 24);
+      body.y = clamp(body.y, 140, canvas.height - body.height - 24);
+    },
+
+    draw(context) {
+      body.draw(context);
+    },
+
+    measure(context) {
+      return body.measure(context);
+    },
+  };
+}
+
+function clamp(value, min, max) {
+  return Math.min(Math.max(value, min), max);
+}
+</script>
+
+<create>
+() => {}
+</create>

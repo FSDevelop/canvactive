@@ -102,6 +102,8 @@ Compiled components are both:
 - mountable root components
 - drawable child components
 
+The compiler emits a component class as the default export. The runtime accepts component classes directly and lazily creates a shared instance for normal composition.
+
 That is why this works:
 
 ```js
@@ -165,6 +167,17 @@ frame
 
 The same frame data is also stored in the exported `engine` singleton, so components can read runtime context without threading it through observable state.
 
+`engine.input` exposes keyboard state:
+
+```ts
+engine.input.down("ArrowLeft")
+engine.input.pressed(" ")
+engine.input.released("w")
+engine.input.anyDown("ArrowLeft", "a", "A")
+```
+
+Keyboard listeners are attached when a canvas project is created and removed when it is destroyed.
+
 Objects drawn with `draw(...)` are also inspected for an `update(context)` method. If present, they are registered during render and updated on following frames. This lets scenes compose game entities without manually forwarding updates:
 
 ```js
@@ -177,6 +190,24 @@ where `Player` implements:
 update(context)
 draw(context)
 measure(context)
+```
+
+For many entities, prefer a factory-style `.can` module:
+
+```js
+import { createEntity } from "../entities/Entity.can";
+```
+
+The factory should return fresh objects that implement the drawable/updateable contract. This keeps entity behavior close to its `.can` file while allowing many independent instances.
+
+Current factory pattern:
+
+```ts
+import Entity from "./Entity.can";
+
+export function createEntity(options) {
+  return new Entity(options);
+}
 ```
 
 ## Canvas Lifecycle
@@ -347,6 +378,8 @@ Current examples:
 examples/counter
 examples/focus-board
 examples/game-loop
+examples/input-runner
+examples/entity-spawner
 ```
 
 `examples/game-loop` uses a more game-oriented structure:
@@ -369,6 +402,8 @@ Run them with:
 npm run dev:counter
 npm run dev:focus
 npm run dev:game
+npm run dev:input
+npm run dev:spawner
 ```
 
 Build checks:

@@ -1,0 +1,34 @@
+<script>
+import { engine } from "@canvactive/core";
+import { text } from "@canvactive/elements";
+import { score } from "../game/state";
+
+const title = text({
+  value: "Input Runner",
+  color: "#172033",
+  fontSize: 36,
+  fontWeight: 700,
+});
+
+const help = text({
+  value: "Move with WASD or arrow keys. Collect the amber square.",
+  color: "#526179",
+  fontSize: 17,
+  fontWeight: 500,
+});
+
+const stats = text({
+  value: () => `score ${score} | frame ${engine.frame} | input ${engine.input.anyDown("ArrowLeft", "ArrowRight", "ArrowUp", "ArrowDown", "w", "a", "s", "d", "W", "A", "S", "D") ? "active" : "idle"}`,
+  color: "#355f63",
+  fontSize: 17,
+  fontWeight: 700,
+});
+</script>
+
+<render>
+({ draw }) => {
+  draw(title, { x: 28, y: 24 });
+  draw(help, { x: 30, y: 72 });
+  draw(stats, { x: 30, y: 104 });
+}
+</render>

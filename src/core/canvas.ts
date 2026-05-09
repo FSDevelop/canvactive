@@ -1,5 +1,6 @@
 import type {
   CanvasComponent,
+  CanvasComponentConstructor,
   CanvasOptions,
   CanvasProject,
 } from "./types.js";
@@ -9,6 +10,8 @@ import { CleanupScope } from "./canvas/lifecycle.js";
 import { createRenderContext } from "./canvas/render-context.js";
 import { resolveCanvasTarget } from "./canvas/target.js";
 import { createUpdateRegistry } from "./canvas/update-registry.js";
+import { engine } from "./engine.js";
+import { bindKeyboardInput } from "./input.js";
 import { collectDependencies } from "./tracking.js";
 
 const defaultCanvasOptions = {
@@ -28,9 +31,11 @@ export function createCanvas(
   const updateRegistry = createUpdateRegistry();
   const setupCleanups = new CleanupScope();
   const renderCleanups = new CleanupScope();
+  const runtimeCleanups = new CleanupScope();
 
   let component: CanvasComponent | undefined;
   let frameId = 0;
+  runtimeCleanups.add(bindKeyboardInput(engine.input));
   let frameLoop = createFrameLoop({
     canvas,
     context,
@@ -88,9 +93,9 @@ export function createCanvas(
       frameLoop.stop();
       setupCleanups.flush();
       renderCleanups.flush();
-      component = nextComponent;
+      component = resolveComponent(nextComponent);
 
-      setupCleanups.add(nextComponent.setup?.(this));
+      setupCleanups.add(component.setup?.(this));
 
       render();
       frameLoop.start();
@@ -101,6 +106,7 @@ export function createCanvas(
       frameLoop.stop();
       setupCleanups.flush();
       renderCleanups.flush();
+      runtimeCleanups.flush();
       interactions.destroy();
 
       if (frameId !== 0) {
@@ -108,4 +114,8 @@ export function createCanvas(
       }
     },
   };
+}
+
+function resolveComponent(component: CanvasComponent | CanvasComponentConstructor): CanvasComponent {
+  return typeof component === "function" ? new component() : component;
 }

@@ -3,11 +3,15 @@ export { createCanvas } from "./canvas.js";
 export { engine } from "./engine.js";
 export { button, rect, text } from "./elements/index.js";
 export { observable } from "./observable.js";
+export type { InputState } from "./input.js";
 export type {
   ButtonElement,
   ButtonOptions,
+  CanvasComponentConstructor,
+  CanvasDrawable,
   CanvasUpdateContext,
   CanvasElement,
+  CanvasElementConstructor,
   CanvasElementOverrides,
   CanvasElementSize,
   CanvasOptions,

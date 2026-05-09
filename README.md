@@ -75,6 +75,16 @@ import Counter from "./elements/Counter.can";
 
 Components are drawable, so one `.can` component can render another with `draw(Component)`.
 
+Under the hood, importing a `.can` file gives you a component class. The runtime accepts the class directly and creates a shared instance when drawing or mounting:
+
+```js
+import PlayScene from "./scenes/PlayScene.can";
+
+draw(PlayScene);
+```
+
+For many independent instances, instantiate the class yourself from a factory.
+
 ## Scenes
 
 Game-style components can use `<script scene>` with `<create>` and `<update>`:
@@ -242,6 +252,30 @@ Run the game-loop example:
 ```bash
 npm run dev:game
 ```
+
+Run the keyboard input example:
+
+```bash
+npm run dev:input
+```
+
+Run the combined entity spawner example:
+
+```bash
+npm run dev:spawner
+```
+
+The spawner shows a factory-style `.can` entity:
+
+```js
+import Entity from "../entities/Entity.can";
+
+export function createEntity(options) {
+  return new Entity(options);
+}
+```
+
+Use this pattern when many instances should share the same entity behavior.
 
 ## Editor Support
 

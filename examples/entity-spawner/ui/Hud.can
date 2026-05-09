@@ -1,0 +1,34 @@
+<script>
+import { engine } from "@canvactive/core";
+import { text } from "@canvactive/elements";
+import { batches, entities } from "../game/state";
+
+const title = text({
+  value: "Entity Spawner",
+  color: "#172033",
+  fontSize: 38,
+  fontWeight: 700,
+});
+
+const help = text({
+  value: "Click Add Entities or press Space. Every spawned entity updates itself.",
+  color: "#526179",
+  fontSize: 17,
+  fontWeight: 500,
+});
+
+const stats = text({
+  value: () => `entities ${entities.value.length} | batches ${batches} | frame ${engine.frame}`,
+  color: "#0f766e",
+  fontSize: 18,
+  fontWeight: 700,
+});
+</script>
+
+<render>
+({ draw }) => {
+  draw(title, { x: 28, y: 24 });
+  draw(help, { x: 30, y: 74 });
+  draw(stats, { x: 30, y: 106 });
+}
+</render>

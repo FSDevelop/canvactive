@@ -1,20 +1,22 @@
 import { createCanvas } from "./canvas.js";
-import type { CanvasProject, CanvasRenderer, Observable } from "./types.js";
+import type { CanvasComponent, CanvasProject, CanvasRenderer, Observable } from "./types.js";
 
 export function bind<T>(
   canvas: HTMLCanvasElement,
   state: Observable<T>,
   renderer: CanvasRenderer<T>,
 ): CanvasProject {
-  return createCanvas(canvas).mount({
+  const component: CanvasComponent = {
     render({ context }) {
       renderer(context, state.get());
     },
     draw(context) {
-      this.render(context);
+      component.render(context);
     },
     measure() {
       return { width: 0, height: 0 };
     },
-  });
+  };
+
+  return createCanvas(canvas).mount(component);
 }

@@ -33,6 +33,8 @@
     "dev:counter": "vite --config examples/counter/vite.config.ts examples/counter",
     "dev:focus": "vite --config examples/focus-board/vite.config.ts examples/focus-board",
     "dev:game": "vite --config examples/game-loop/vite.config.ts examples/game-loop",
+    "dev:input": "vite --config examples/input-runner/vite.config.ts examples/input-runner",
+    "dev:spawner": "vite --config examples/entity-spawner/vite.config.ts examples/entity-spawner",
     "typecheck": "tsc --noEmit"
   },
   "keywords": [

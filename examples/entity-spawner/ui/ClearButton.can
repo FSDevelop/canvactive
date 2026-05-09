@@ -1,0 +1,13 @@
+<script>
+import { button } from "@canvactive/elements";
+</script>
+
+<render>
+({ draw }) => {
+  draw(button({
+    label: "Clear",
+    width: 160,
+    background: "#7c2d12",
+  }), { x: 620, y: 82 });
+}
+</render>

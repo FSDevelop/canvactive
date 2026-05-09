@@ -1,0 +1,22 @@
+<script scene>
+import { score } from "../game/state";
+import { intersects } from "../game/collision";
+import Goal from "../entities/Goal";
+import Player from "../entities/Player";
+import Hud from "../ui/Hud.can";
+
+export function update() {
+  if (intersects(Player, Goal)) {
+    score.value++;
+    Goal.move();
+  }
+}
+</script>
+
+<create>
+({ draw }) => {
+  draw(Hud);
+  draw(Goal);
+  draw(Player);
+}
+</create>

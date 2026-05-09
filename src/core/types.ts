@@ -13,7 +13,7 @@ export interface Observable<T> {
 export interface CanvasRenderContext {
   canvas: HTMLCanvasElement;
   context: CanvasRenderingContext2D;
-  draw(element: CanvasElement, overrides?: CanvasElementOverrides): void;
+  draw(element: CanvasDrawable, overrides?: CanvasElementOverrides): void;
 }
 
 export interface CanvasElementOverrides {
@@ -29,6 +29,12 @@ export interface CanvasElement {
   measure(context: CanvasRenderContext): CanvasElementSize;
   update?: (context: CanvasUpdateContext) => void;
 }
+
+export interface CanvasElementConstructor<T extends CanvasElement = CanvasElement> {
+  new (...args: unknown[]): T;
+}
+
+export type CanvasDrawable = CanvasElement | CanvasElementConstructor;
 
 export interface CanvasElementSize {
   width: number;
@@ -99,6 +105,7 @@ export interface CanvasUpdateContext {
   delta: number;
   elapsed: number;
   frame: number;
+  input: import("./input.js").InputState;
 }
 
 export interface CanvasComponent extends CanvasElement {
@@ -107,8 +114,12 @@ export interface CanvasComponent extends CanvasElement {
   render: (context: CanvasRenderContext) => void;
 }
 
+export interface CanvasComponentConstructor {
+  new (...args: unknown[]): CanvasComponent;
+}
+
 export interface CanvasProject {
   render(): void;
-  mount(component: CanvasComponent): CanvasProject;
+  mount(component: CanvasComponent | CanvasComponentConstructor): CanvasProject;
   destroy(): void;
 }

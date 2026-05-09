@@ -3,8 +3,6 @@ import { observable } from "../../src/main";
 
 const count = observable(0);
 
-export const watch = [count];
-
 export function setup() {
   const button = document.querySelector("#increment");
 

@@ -1,11 +1,13 @@
 import type { Observable, Observer } from "./types.js";
+import { trackDependency } from "./tracking.js";
 
 export function observable<T>(initialValue: T): Observable<T> {
   let value = initialValue;
   const observers = new Set<Observer<T>>();
 
-  return {
+  const state: Observable<T> = {
     get() {
+      trackDependency(state as Observable<unknown>);
       return value;
     },
 
@@ -31,4 +33,6 @@ export function observable<T>(initialValue: T): Observable<T> {
       };
     },
   };
+
+  return state;
 }

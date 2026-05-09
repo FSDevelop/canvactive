@@ -1,4 +1,5 @@
 import type { CanvasComponent, CanvasProject, Unsubscribe } from "./types.js";
+import { collectDependencies } from "./tracking.js";
 
 export function createCanvas(selector: string | HTMLCanvasElement): CanvasProject {
   const canvas =
@@ -18,13 +19,21 @@ export function createCanvas(selector: string | HTMLCanvasElement): CanvasProjec
 
   let component: CanvasComponent | undefined;
   let frameId = 0;
-  let cleanups: Unsubscribe[] = [];
+  let setupCleanups: Unsubscribe[] = [];
+  let renderCleanups: Unsubscribe[] = [];
 
   const render = () => {
     frameId = 0;
+    cleanupRenderSubscriptions();
 
     if (component) {
-      component.render({ canvas, context });
+      const dependencies = collectDependencies(() => {
+        component?.render({ canvas, context });
+      });
+
+      dependencies.forEach((dependency) => {
+        renderCleanups.push(dependency.subscribe(scheduleRender));
+      });
     }
   };
 
@@ -36,32 +45,35 @@ export function createCanvas(selector: string | HTMLCanvasElement): CanvasProjec
     frameId = requestAnimationFrame(render);
   };
 
-  const cleanup = () => {
-    cleanups.forEach((unsubscribe) => unsubscribe());
-    cleanups = [];
+  const cleanupSetup = () => {
+    setupCleanups.forEach((unsubscribe) => unsubscribe());
+    setupCleanups = [];
+  };
+
+  const cleanupRenderSubscriptions = () => {
+    renderCleanups.forEach((unsubscribe) => unsubscribe());
+    renderCleanups = [];
   };
 
   return {
     render: scheduleRender,
     mount(nextComponent) {
-      cleanup();
+      cleanupSetup();
+      cleanupRenderSubscriptions();
       component = nextComponent;
-
-      nextComponent.watch?.forEach((observableState) => {
-        cleanups.push(observableState.subscribe(scheduleRender));
-      });
 
       const setupCleanup = nextComponent.setup?.(this);
 
       if (setupCleanup) {
-        cleanups.push(setupCleanup);
+        setupCleanups.push(setupCleanup);
       }
 
       render();
       return this;
     },
     destroy() {
-      cleanup();
+      cleanupSetup();
+      cleanupRenderSubscriptions();
 
       if (frameId !== 0) {
         cancelAnimationFrame(frameId);

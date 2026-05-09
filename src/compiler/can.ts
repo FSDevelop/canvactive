@@ -9,7 +9,6 @@ export function compileCan(source: string): string {
   return [
     script.trim(),
     "const __can_component = {",
-    "  watch: typeof watch === 'undefined' ? undefined : watch,",
     "  setup: typeof setup === 'undefined' ? undefined : setup,",
     `  render: ${render.trim()},`,
     "};",

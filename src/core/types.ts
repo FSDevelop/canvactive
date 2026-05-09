@@ -14,7 +14,6 @@ export interface CanvasRenderContext {
 }
 
 export interface CanvasComponent {
-  watch?: Observable<unknown>[];
   setup?: (canvas: CanvasProject) => void | Unsubscribe;
   render: (context: CanvasRenderContext) => void;
 }

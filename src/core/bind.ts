@@ -7,7 +7,6 @@ export function bind<T>(
   renderer: CanvasRenderer<T>,
 ): CanvasProject {
   return createCanvas(canvas).mount({
-    watch: [state as Observable<unknown>],
     render({ context }) {
       renderer(context, state.get());
     },

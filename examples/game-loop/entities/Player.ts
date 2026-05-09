@@ -1,10 +1,9 @@
 import type { CanvasRenderContext, CanvasUpdateContext } from "@canvactive/core";
 import { rect } from "@canvactive/elements";
-import { playerX } from "../game/state";
 import { world } from "../game/config";
 
 const player = rect({
-  x: playerX.value,
+  x: 40,
   y: 190,
   width: 52,
   height: 52,
@@ -14,6 +13,14 @@ const player = rect({
 let direction = 1;
 
 const Player = {
+  get x() {
+    return player.x;
+  },
+
+  get y() {
+    return player.y;
+  },
+
   update(context: CanvasUpdateContext) {
     player.x += world.playerSpeed * direction * context.delta;
 
@@ -26,8 +33,6 @@ const Player = {
       player.x = world.padding;
       direction = 1;
     }
-
-    playerX.value = player.x;
   },
 
   draw(context: CanvasRenderContext) {

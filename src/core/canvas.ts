@@ -8,6 +8,7 @@ import { createCanvasInteractions } from "./canvas/interactions.js";
 import { CleanupScope } from "./canvas/lifecycle.js";
 import { createRenderContext } from "./canvas/render-context.js";
 import { resolveCanvasTarget } from "./canvas/target.js";
+import { createUpdateRegistry } from "./canvas/update-registry.js";
 import { collectDependencies } from "./tracking.js";
 
 const defaultCanvasOptions = {
@@ -24,6 +25,7 @@ export function createCanvas(
   };
   const { canvas, context } = resolveCanvasTarget(selector);
   const interactions = createCanvasInteractions(canvas);
+  const updateRegistry = createUpdateRegistry();
   const setupCleanups = new CleanupScope();
   const renderCleanups = new CleanupScope();
 
@@ -34,6 +36,7 @@ export function createCanvas(
     context,
     update(updateContext) {
       component?.update?.(updateContext);
+      updateRegistry.update(updateContext);
     },
     render() {
       render();
@@ -44,12 +47,18 @@ export function createCanvas(
     frameId = 0;
     renderCleanups.flush();
     interactions.reset();
+    updateRegistry.reset();
     context.clearRect(0, 0, canvas.width, canvas.height);
     context.fillStyle = canvasOptions.background;
     context.fillRect(0, 0, canvas.width, canvas.height);
 
     if (component) {
-      const renderContext = createRenderContext(canvas, context, interactions.register);
+      const renderContext = createRenderContext(
+        canvas,
+        context,
+        interactions.register,
+        updateRegistry.register,
+      );
 
       const dependencies = collectDependencies(() => {
         component?.render(renderContext);
@@ -83,11 +92,8 @@ export function createCanvas(
 
       setupCleanups.add(nextComponent.setup?.(this));
 
-      if (nextComponent.update) {
-        frameLoop.start();
-      } else {
-        render();
-      }
+      render();
+      frameLoop.start();
 
       return this;
     },

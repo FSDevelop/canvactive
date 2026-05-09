@@ -2,12 +2,6 @@
 import PlayScene from "./scenes/PlayScene.can";
 </script>
 
-<update>
-(context) => {
-  PlayScene.update(context);
-}
-</update>
-
 <create>
 ({ draw }) => {
   draw(PlayScene);

@@ -3,12 +3,6 @@ import Player from "../entities/Player";
 import Hud from "../ui/Hud.can";
 </script>
 
-<update>
-(context) => {
-  Player.update(context);
-}
-</update>
-
 <create>
 ({ draw }) => {
   draw(Hud);

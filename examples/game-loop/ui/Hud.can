@@ -1,7 +1,7 @@
 <script>
 import { engine } from "@canvactive/core";
 import { text } from "@canvactive/elements";
-import { playerX } from "../game/state";
+import Player from "../entities/Player";
 
 const title = text({
   value: "Optional update() lifecycle",
@@ -11,7 +11,7 @@ const title = text({
 });
 
 const stats = text({
-  value: () => `frame ${engine.frame} | delta ${engine.delta.toFixed(3)}s | x ${Math.round(playerX.value)}`,
+  value: () => `frame ${engine.frame} | delta ${engine.delta.toFixed(3)}s | x ${Math.round(Player.x)}`,
   color: "#9fb2cc",
   fontSize: 17,
   fontWeight: 500,

@@ -10,6 +10,7 @@ export function createRenderContext(
   canvas: HTMLCanvasElement,
   context: CanvasRenderingContext2D,
   registerInteractiveElement: (element: InteractiveCanvasElement) => void,
+  registerUpdateableElement: (element: CanvasElement) => void,
 ): CanvasRenderContext {
   const flow = {
     x: 0,
@@ -30,6 +31,10 @@ export function createRenderContext(
 
       if (isInteractiveElement(element)) {
         registerInteractiveElement(element);
+      }
+
+      if (element.update) {
+        registerUpdateableElement(element);
       }
     },
   } satisfies Parameters<CanvasComponent["render"]>[0];

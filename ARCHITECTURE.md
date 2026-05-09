@@ -165,6 +165,20 @@ frame
 
 The same frame data is also stored in the exported `engine` singleton, so components can read runtime context without threading it through observable state.
 
+Objects drawn with `draw(...)` are also inspected for an `update(context)` method. If present, they are registered during render and updated on following frames. This lets scenes compose game entities without manually forwarding updates:
+
+```js
+draw(Player);
+```
+
+where `Player` implements:
+
+```ts
+update(context)
+draw(context)
+measure(context)
+```
+
 ## Canvas Lifecycle
 
 `src/core/canvas.ts` owns `createCanvas`.

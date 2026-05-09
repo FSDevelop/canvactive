@@ -101,6 +101,37 @@ const player = rect({ x: 40, y: 190, width: 52, height: 52 });
 
 For scene components, `<create>` defines the draw tree and `<update>` runs on the frame loop.
 
+Drawn objects can also update themselves. If an object passed to `draw()` has an `update()` method, Canvactive calls it every frame:
+
+```js
+const Player = {
+  x: 40,
+
+  update({ delta }) {
+    this.x += 180 * delta;
+  },
+
+  draw(context) {
+    // draw player
+  },
+
+  measure() {
+    return { width: 52, height: 52 };
+  },
+};
+```
+
+That keeps scenes focused on composition:
+
+```html
+<create>
+({ draw }) => {
+  draw(Hud);
+  draw(Player);
+}
+</create>
+```
+
 ## State
 
 Use `observable()` for reactive state:

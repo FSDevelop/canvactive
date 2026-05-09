@@ -27,6 +27,7 @@ export interface CanvasElement {
   layout?: "flow" | "absolute";
   draw(context: CanvasRenderContext, overrides?: CanvasElementOverrides): void;
   measure(context: CanvasRenderContext): CanvasElementSize;
+  update?: (context: CanvasUpdateContext) => void;
 }
 
 export interface CanvasElementSize {
@@ -103,7 +104,6 @@ export interface CanvasUpdateContext {
 export interface CanvasComponent extends CanvasElement {
   onClick?: () => void;
   setup?: (canvas: CanvasProject) => void | Unsubscribe;
-  update?: (context: CanvasUpdateContext) => void;
   render: (context: CanvasRenderContext) => void;
 }
 

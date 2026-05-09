@@ -1,15 +1,36 @@
 # Canvactive
 
-Small reactive state bindings for canvas rendering.
+Reactive canvas components with a small `.can` single-file component format.
 
-## Example
+Canvactive is early-stage. The current API focuses on:
+
+- reactive state with `observable`
+- canvas project mounting with `createCanvas`
+- drawable `.can` components
+- canvas-native elements like `text` and `button`
+- Vite compilation for `.can` files
+
+## Usage
+
+Create a canvas in HTML:
+
+```html
+<canvas id="app" width="760" height="420"></canvas>
+<script type="module" src="./main.ts"></script>
+```
+
+Mount a `.can` component:
 
 ```ts
 import { createCanvas } from "@canvactive/core";
-import Counter from "./Counter.can";
+import Canvas from "./Canvas.can";
 
-createCanvas("#counter-canvas").mount(Counter);
+createCanvas("#app", {
+  background: "#eef2f8",
+}).mount(Canvas);
 ```
+
+## Vite
 
 Use the Vite plugin to compile `.can` files:
 
@@ -22,15 +43,133 @@ export default defineConfig({
 });
 ```
 
+In this repo, examples use local aliases while the package is under development:
+
+```ts
+export default defineConfig({
+  resolve: {
+    alias: {
+      "@canvactive/core": new URL("../../src/core/index.ts", import.meta.url).pathname,
+      "@canvactive/elements": new URL("../../src/core/elements/index.ts", import.meta.url).pathname,
+    },
+  },
+  plugins: [canvactive()],
+});
+```
+
+## Components
+
+A `.can` file has a `<script>` block and a `<render>` block:
+
+```html
+<script>
+import Counter from "./elements/Counter.can";
+</script>
+
+<render>
+({ draw }) => {
+  draw(Counter);
+}
+</render>
+```
+
+Components are drawable, so one `.can` component can render another with `draw(Component)`.
+
+## State
+
+Use `observable()` for reactive state:
+
+```html
+<script>
+import { observable } from "@canvactive/core";
+
+const count = observable(0);
+
+function increment() {
+  count.value++;
+}
+</script>
+```
+
+Observables expose `.value` for reads and writes. They also stringify, so they can be used in text templates:
+
+```js
+`Counter: ${count}`
+```
+
+When observable state is read during rendering, Canvactive tracks it automatically and rerenders when it changes.
+
+## Elements
+
+Import canvas-native elements from `@canvactive/elements`:
+
+```html
+<script>
+import { text, button } from "@canvactive/elements";
+
+const label = text(`Counter: ${count}`);
+const incrementButton = button({
+  label: "Increase counter",
+  onClick() {
+    count.value++;
+  },
+});
+</script>
+
+<render>
+({ draw }) => {
+  draw(label);
+  draw(incrementButton);
+}
+</render>
+```
+
+`draw(element)` defaults to a simple top-left vertical flow. Passing coordinates overrides that:
+
+```js
+draw(label, { x: 40, y: 36 });
+```
+
+## Button Composition
+
+Canvas buttons can live inside their own `.can` files:
+
+```html
+<script>
+import { button } from "@canvactive/elements";
+</script>
+
+<render>
+({ draw }) => {
+  draw(button({ label: "Add session" }));
+}
+</render>
+```
+
+Parent components can assign click handlers to drawable button components:
+
+```js
+AddSessionButton.onClick = () => {
+  sessions.value++;
+};
+```
+
+## Examples
+
+Run the minimal counter:
+
+```bash
+npm run dev:counter
+```
+
+Run the larger focus board example:
+
+```bash
+npm run dev:focus
+```
+
 ## Editor Support
 
 VS Code syntax highlighting for `.can` files lives in `packages/vscode-canvactive`.
 
-The extension highlights both `<script>` and `<render>` blocks as JavaScript.
-
-## Examples
-
-```bash
-npm run dev:counter
-npm run dev:focus
-```
+Open that folder in VS Code and run the extension host to highlight both `<script>` and `<render>` blocks as JavaScript.
